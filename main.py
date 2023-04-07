@@ -1,9 +1,17 @@
 import telebot
 from telebot import types
+from dotenv import load_dotenv
+import os
 
-token = ""  
-speakerChannel = ""
-bot = telebot.TeleBot(token)       
+load_dotenv()
+
+TOKEN = os.environ.get('TOKEN')  
+SPEACKERCHANNEL = os.environ.get('SPEACKERCHANNEL')  
+URLCHAT = os.environ.get('URLCHAT')
+URLSITE = os.environ.get('URLSITE')
+print(URLCHAT, URLSITE)
+
+bot = telebot.TeleBot(TOKEN)       
 
 
 # Клавиатуры для пользователя
@@ -17,8 +25,8 @@ btnQuestion = types.KeyboardButton("📢 Задать вопрос спикер�
 btnOrder = types.KeyboardButton("🆘 Обратиться за помощью")
 btnGoIt = types.KeyboardButton("🦾 Стать Айтишником")
 btnCancel = types.KeyboardButton("🚫 Отменить")
-btnGroup = types.InlineKeyboardButton(text="Чат с поддержкой", url="")      # Указать спригласительную ссылку на канал telegram
-btnIt = types.InlineKeyboardButton(text="Наш сайт", url="")                 # Указать сайт
+btnGroup = types.InlineKeyboardButton(text="Чат с поддержкой(пока тестовый)", url=URLCHAT)
+btnIt = types.InlineKeyboardButton(text="Наш сайт", url=URLSITE)
 
 keyboardStart.row(btnQuestion)
 keyboardStart.row(btnOrder)
@@ -54,7 +62,8 @@ def sendQuestion(message):
         bot.register_next_step_handler(message, getMessages)
     else:
         """Отправка и зануление переменных"""
-        bot.send_message(speakerChannel, message.text)
+        user_message = f'Вопрос от {message.from_user.username}:\n{message.text}\nСсылка на его TG: https://t.me/{message.from_user.username}' 
+        bot.send_message(SPEACKERCHANNEL, user_message)
         bot.send_message(message.from_user.id, "Ваше сообщение отправлено спикеру", reply_markup=keyboardStart)
         bot.register_next_step_handler(message, getMessages)
 
