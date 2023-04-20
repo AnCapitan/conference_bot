@@ -9,6 +9,7 @@ TOKEN = os.environ.get('TOKEN')
 SPEACKERGROUP = os.environ.get('SPEACKERGROUP')  
 URLCHAT = os.environ.get('URLCHAT')
 URLSITE = os.environ.get('URLSITE')
+AFTERPARTY = os.environ.get('AFTERPARTY')
 
 bot = telebot.TeleBot(TOKEN)       
 
@@ -18,21 +19,26 @@ keyboardStart = types.ReplyKeyboardMarkup(resize_keyboard=True)
 keyboardCancel = types.ReplyKeyboardMarkup(resize_keyboard=True)
 keyboardRedirect = types.InlineKeyboardMarkup()
 keyboardGoIt = types.InlineKeyboardMarkup()
+keyboardGoAffter = types.InlineKeyboardMarkup()
 
 # Кнопки на клавиатурах
 btnQuestion = types.KeyboardButton("📢 Задать вопрос спикеру")
 btnOrder = types.KeyboardButton("🆘 Обратиться за помощью")
 btnGoIt = types.KeyboardButton("🦾 Стать Айтишником")
+btnAffter = types.KeyboardButton("🍾 AfterParty")
 btnCancel = types.KeyboardButton("🚫 Отменить")
-btnGroup = types.InlineKeyboardButton(text="Чат с поддержкой(пока тестовый)", url=URLCHAT)
+btnGroup = types.InlineKeyboardButton(text="Чат с поддержкой", url=URLCHAT)
 btnIt = types.InlineKeyboardButton(text="Наш сайт", url=URLSITE)
+btnLinkAfter = types.InlineKeyboardButton(text="Регистрация на AfterParty", url=AFTERPARTY)
 
 keyboardStart.row(btnQuestion)
 keyboardStart.row(btnOrder)
 keyboardStart.row(btnGoIt)
+keyboardStart.row(btnAffter)
 keyboardCancel.add(btnCancel)
 keyboardRedirect.add(btnGroup)
 keyboardGoIt.add(btnIt)
+keyboardGoAffter.add(btnLinkAfter)
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -49,6 +55,8 @@ def getMessages(message):
 
     elif message.text == "🦾 Стать Айтишником":
         bot.send_message(message.from_user.id, "Присоединяйся к нам!", reply_markup=keyboardGoIt)
+    elif message.text == "🍾 AfterParty":
+        bot.send_message(message.from_user.id, "Проведи вечер с нами!", reply_markup=keyboardGoAffter)
     else:
         bot.send_message(message.from_user.id, "Извините, я Вас не понимаю... Воспользуйтесь кнопками", reply_markup=keyboardStart)
 
